@@ -9,7 +9,6 @@ package paintbasico;
  * @author David
  */
 public class VentanaInterna extends javax.swing.JInternalFrame {
-
     /**
      * Creates new form VentanaInterna
      */
@@ -18,9 +17,11 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
         
     }
     
-    public SM.DSC.IU.Lienzo2D getLienzo(){
-        return lienzo2D1;
+    public SM.DSC.IU.Lienzo2DImagen getLienzo(){
+        return lienzo2DImagen1;
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -31,7 +32,8 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lienzo2D1 = new SM.DSC.IU.Lienzo2D();
+        panelScroll = new javax.swing.JScrollPane();
+        lienzo2DImagen1 = new SM.DSC.IU.Lienzo2DImagen();
 
         setClosable(true);
         setIconifiable(true);
@@ -39,23 +41,26 @@ public class VentanaInterna extends javax.swing.JInternalFrame {
         setResizable(true);
         setTitle("Nuevo lienzo");
 
-        javax.swing.GroupLayout lienzo2D1Layout = new javax.swing.GroupLayout(lienzo2D1);
-        lienzo2D1.setLayout(lienzo2D1Layout);
-        lienzo2D1Layout.setHorizontalGroup(
-            lienzo2D1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 394, Short.MAX_VALUE)
+        javax.swing.GroupLayout lienzo2DImagen1Layout = new javax.swing.GroupLayout(lienzo2DImagen1);
+        lienzo2DImagen1.setLayout(lienzo2DImagen1Layout);
+        lienzo2DImagen1Layout.setHorizontalGroup(
+            lienzo2DImagen1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 384, Short.MAX_VALUE)
         );
-        lienzo2D1Layout.setVerticalGroup(
-            lienzo2D1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 278, Short.MAX_VALUE)
+        lienzo2DImagen1Layout.setVerticalGroup(
+            lienzo2DImagen1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 265, Short.MAX_VALUE)
         );
 
-        getContentPane().add(lienzo2D1, java.awt.BorderLayout.CENTER);
+        panelScroll.setViewportView(lienzo2DImagen1);
+
+        getContentPane().add(panelScroll, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private SM.DSC.IU.Lienzo2D lienzo2D1;
+    private SM.DSC.IU.Lienzo2DImagen lienzo2DImagen1;
+    private javax.swing.JScrollPane panelScroll;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -6,28 +6,32 @@ package paintbasico;
 
 import SM.DSC.IU.Lienzo2D;
 import java.awt.Color;
-import java.beans.PropertyVetoException;
+import java.awt.image.BufferedImage;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JSlider;
+import sm.image.KernelProducer;
 
 /**
  *
  * @author David
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
-
+    BufferedImage imagenFoco = null;
     /**
      * Creates new form VentanaPrincipal
      */
     public VentanaPrincipal() {
         initComponents();
+        /*
         VentanaInterna vi = new VentanaInterna();
         this.panelEscritorio.add(vi); 
         vi.setVisible(true);
         this.panelEscritorio.getDesktopManager().activateFrame(vi);
+        */
     }
     
     private void deseleccionarFormas(){
@@ -68,6 +72,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         cbAlisar = new javax.swing.JCheckBox();
         cbTransparencia = new javax.swing.JCheckBox();
         cbEditar = new javax.swing.JCheckBox();
+        panelBrillo = new javax.swing.JPanel();
+        sliderBrillo = new javax.swing.JSlider();
+        panelFiltro = new javax.swing.JPanel();
+        comboFiltro = new javax.swing.JComboBox();
         panelEscritorio = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -81,7 +89,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Paint Básico");
-        setPreferredSize(new java.awt.Dimension(800, 700));
+        setPreferredSize(new java.awt.Dimension(1000, 800));
 
         tbFormas.setRollover(true);
 
@@ -285,27 +293,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 spinnerGrosorStateChanged(evt);
             }
         });
-
-        javax.swing.GroupLayout panelGrosorLayout = new javax.swing.GroupLayout(panelGrosor);
-        panelGrosor.setLayout(panelGrosorLayout);
-        panelGrosorLayout.setHorizontalGroup(
-            panelGrosorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 78, Short.MAX_VALUE)
-            .addGroup(panelGrosorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelGrosorLayout.createSequentialGroup()
-                    .addGap(0, 24, Short.MAX_VALUE)
-                    .addComponent(spinnerGrosor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 25, Short.MAX_VALUE)))
-        );
-        panelGrosorLayout.setVerticalGroup(
-            panelGrosorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 66, Short.MAX_VALUE)
-            .addGroup(panelGrosorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelGrosorLayout.createSequentialGroup()
-                    .addGap(0, 23, Short.MAX_VALUE)
-                    .addComponent(spinnerGrosor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 23, Short.MAX_VALUE)))
-        );
+        panelGrosor.add(spinnerGrosor);
 
         panelAtributos.add(panelGrosor);
 
@@ -345,6 +333,29 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelEfectos.add(cbEditar);
 
         panelAtributos.add(panelEfectos);
+
+        panelBrillo.setBorder(javax.swing.BorderFactory.createTitledBorder("Brillo"));
+
+        sliderBrillo.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                sliderBrilloStateChanged(evt);
+            }
+        });
+        panelBrillo.add(sliderBrillo);
+
+        panelAtributos.add(panelBrillo);
+
+        panelFiltro.setBorder(javax.swing.BorderFactory.createTitledBorder("Filtro"));
+
+        comboFiltro.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Media", "Binomial", "Enfoque", "Relieve", "Laplacaino" }));
+        comboFiltro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboFiltroActionPerformed(evt);
+            }
+        });
+        panelFiltro.add(comboFiltro);
+
+        panelAtributos.add(panelFiltro);
 
         jPanel1.add(panelAtributos, java.awt.BorderLayout.WEST);
 
@@ -430,17 +441,37 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         JFileChooser dlg = new JFileChooser();
         int resp = dlg.showOpenDialog(this);
         if( resp == JFileChooser.APPROVE_OPTION) {
-            File f = dlg.getSelectedFile();
-            System.out.println(f);
+            try {
+                File f = dlg.getSelectedFile();
+                BufferedImage img = ImageIO.read(f);
+                VentanaInterna vi = new VentanaInterna();
+                vi.getLienzo().setImage(img);
+                this.panelEscritorio.add(vi);
+                vi.setTitle(f.getName());
+                vi.setVisible(true);
+            } catch (Exception ex) {
+                System.err.println("Error al leer la imagen: "+ex);
+            }
         }
     }//GEN-LAST:event_miAbrirActionPerformed
 
     private void miGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miGuardarActionPerformed
-        JFileChooser dlg = new JFileChooser();
-        int resp = dlg.showSaveDialog(this);
-        if( resp == JFileChooser.APPROVE_OPTION) {
-            File f = dlg.getSelectedFile();
-            System.out.println(f);
+        VentanaInterna vi=(VentanaInterna) panelEscritorio.getSelectedFrame(); 
+        if (vi != null) {
+            JFileChooser dlg = new JFileChooser();
+            int resp = dlg.showSaveDialog(this);
+            if (resp == JFileChooser.APPROVE_OPTION) {
+                try {
+                    BufferedImage img = vi.getLienzo().getImage(true);
+                    if (img != null) {
+                        File f = dlg.getSelectedFile();
+                        ImageIO.write(img, "jpg", f);
+                        vi.setTitle(f.getName());
+                    }
+                }catch (Exception ex) {
+                    System.err.println("Error al guardar la imagen: "+ex);
+                }
+            }
         }
     }//GEN-LAST:event_miGuardarActionPerformed
 
@@ -514,7 +545,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         VentanaInterna vi = new VentanaInterna();
         this.panelEscritorio.add(vi); 
         vi.setVisible(true);
-        
+        BufferedImage img;
+        img = new BufferedImage(300,300,BufferedImage.TYPE_INT_RGB);
+        img.createGraphics().fillRect(0, 0, 300, 300);
+        vi.getLienzo().setImage(img);
     }//GEN-LAST:event_miNuevoActionPerformed
 
     private void tbElipseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbElipseMouseClicked
@@ -553,6 +587,44 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         vi.getLienzo().setGrosor((int)spinnerGrosor.getValue());
     }//GEN-LAST:event_spinnerGrosorStateChanged
 
+    private void comboFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboFiltroActionPerformed
+        VentanaInterna vi = (VentanaInterna)panelEscritorio.getSelectedFrame();
+        BufferedImage resultado = vi.getLienzo().getImage(true);
+        
+        if(imagenFoco != null){
+            Kernel k = null;
+
+            switch(this.comboFiltro.getSelectedIndex()){
+                case 0:
+                    k = KernelProducer.createKernel(KernelProducer.TYPE_MEDIA_3x3);
+                    break;
+                case 1:
+                    k = KernelProducer.createKernel(KernelProducer.TYPE_BINOMIAL_3x3);
+                    break;
+                case 2:
+                    k = KernelProducer.createKernel(KernelProducer.TYPE_ENFOQUE_3x3);
+                    break;
+                case 3:
+                    k = KernelProducer.createKernel(KernelProducer.TYPE_RELIEVE_3x3);
+                    break;
+                case 4:
+                    k = KernelProducer.createKernel(KernelProducer.TYPE_LAPLACIANA_3x3);
+                default:
+            }
+            ConvolveOp cop = new ConvolveOp(k,ConvolveOp.EDGE_NO_OP,null);
+            cop.filter(resultado, null);
+        }
+        
+    }//GEN-LAST:event_comboFiltroActionPerformed
+
+    private void sliderBrilloStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderBrilloStateChanged
+        JSlider source = (JSlider)evt.getSource();
+        if (!source.getValueIsAdjusting()) {
+            int valor = (int)source.getValue();
+            System.out.println("Slider"+valor);
+        }
+    }//GEN-LAST:event_sliderBrilloStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox cbAlisar;
     private javax.swing.JCheckBox cbEditar;
@@ -561,6 +633,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JCheckBoxMenuItem cbmAtributos;
     private javax.swing.JCheckBoxMenuItem cbmEstado;
     private javax.swing.JCheckBoxMenuItem cbmFormas;
+    private javax.swing.JComboBox comboFiltro;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -576,10 +649,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem miGuardar;
     private javax.swing.JMenuItem miNuevo;
     private javax.swing.JPanel panelAtributos;
+    private javax.swing.JPanel panelBrillo;
     private javax.swing.JPanel panelColor;
     private javax.swing.JPanel panelEfectos;
     private javax.swing.JDesktopPane panelEscritorio;
+    private javax.swing.JPanel panelFiltro;
     private javax.swing.JPanel panelGrosor;
+    private javax.swing.JSlider sliderBrillo;
     private javax.swing.JSpinner spinnerGrosor;
     private javax.swing.JToggleButton tbElipse;
     private javax.swing.JToolBar tbFormas;
