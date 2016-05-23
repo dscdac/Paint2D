@@ -102,29 +102,26 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 vi.setTitle(f.getName());
                 vi.setVisible(true);
             } catch (Exception ex) {
-                System.err.println("Error al leer el audio: "+ex);
+                System.err.println("Error al cargar el audio: "+ex);
             }
         }
     }//GEN-LAST:event_miAbrirActionPerformed
 
     private void miGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miGuardarActionPerformed
-        VentanaInterna vi=(VentanaInterna) panelEscritorio.getSelectedFrame(); 
-        if (vi != null) {
-            JFileChooser dlg = new JFileChooser();
-            int resp = dlg.showSaveDialog(this);
-            if (resp == JFileChooser.APPROVE_OPTION) {
-                try {
-                    BufferedImage img = vi.getLienzo().getImage(true);
-                    if (img != null) {
-                        File f = dlg.getSelectedFile();
-                        ImageIO.write(img, "jpg", f);
-                        vi.setTitle(f.getName());
-                    }
-                }catch (Exception ex) {
-                    System.err.println("Error al guardar la imagen: "+ex);
-                }
+        JFileChooser dlg = new JFileChooser();
+        int resp = dlg.showOpenDialog(this);
+        if( resp == JFileChooser.APPROVE_OPTION) {
+            try {
+                File f = dlg.getSelectedFile();
+                VentanaInternaGrabador vi = new VentanaInternaGrabador(f);
+                this.panelEscritorio.add(vi);
+                vi.setTitle(f.getName());
+                vi.setVisible(true);
+            } catch (Exception ex) {
+                System.err.println("Error al seleccionar ruta: "+ex);
             }
         }
+        
     }//GEN-LAST:event_miGuardarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
