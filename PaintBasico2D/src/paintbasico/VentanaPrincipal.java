@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
+import java.awt.image.RescaleOp;
 import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -615,13 +616,32 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             cop.filter(resultado, null);
         }
         
+        
     }//GEN-LAST:event_comboFiltroActionPerformed
 
     private void sliderBrilloStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sliderBrilloStateChanged
-        JSlider source = (JSlider)evt.getSource();
+        JSlider source = (JSlider) evt.getSource();
+
         if (!source.getValueIsAdjusting()) {
-            int valor = (int)source.getValue();
-            System.out.println("Slider"+valor);
+            int valor = (int) source.getValue();
+            System.out.println("Slider" + valor);
+
+
+            VentanaInterna vi = (VentanaInterna) (panelEscritorio.getSelectedFrame());
+
+            if (vi != null) {
+                BufferedImage imgSource = vi.getLienzo().getImage();
+                if (imgSource != null) {
+                    try {
+                        RescaleOp rop = new RescaleOp(1.0F, valor, null);
+                        BufferedImage imgdest = rop.filter(imgSource, null);
+                        vi.getLienzo().setImage(imgdest);
+                        vi.getLienzo().repaint();
+                    } catch (IllegalArgumentException e) {
+                        System.err.println(e.getLocalizedMessage());
+                    }
+                }
+            }
         }
     }//GEN-LAST:event_sliderBrilloStateChanged
 
