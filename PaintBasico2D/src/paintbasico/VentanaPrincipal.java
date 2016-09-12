@@ -87,6 +87,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         cbmEstado = new javax.swing.JCheckBoxMenuItem();
         cbmFormas = new javax.swing.JCheckBoxMenuItem();
         cbmAtributos = new javax.swing.JCheckBoxMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Paint Básico");
@@ -96,6 +98,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         tbLapiz.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Lapiz.gif"))); // NOI18N
         tbLapiz.setSelected(true);
+        tbLapiz.setToolTipText("Lápiz");
         tbLapiz.setFocusable(false);
         tbLapiz.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         tbLapiz.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -107,6 +110,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         tbFormas.add(tbLapiz);
 
         tbLinea.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Linea.gif"))); // NOI18N
+        tbLinea.setToolTipText("Línea");
         tbLinea.setFocusable(false);
         tbLinea.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         tbLinea.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -118,6 +122,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         tbFormas.add(tbLinea);
 
         tbRectangulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Rectangulo.gif"))); // NOI18N
+        tbRectangulo.setToolTipText("Rectángulo");
         tbRectangulo.setFocusable(false);
         tbRectangulo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         tbRectangulo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -129,6 +134,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         tbFormas.add(tbRectangulo);
 
         tbElipse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Ovalo.gif"))); // NOI18N
+        tbElipse.setToolTipText("Elipse");
         tbElipse.setFocusable(false);
         tbElipse.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         tbElipse.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -342,13 +348,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 sliderBrilloStateChanged(evt);
             }
         });
+        sliderBrillo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                sliderBrilloFocusGained(evt);
+            }
+        });
         panelBrillo.add(sliderBrillo);
 
         panelAtributos.add(panelBrillo);
 
         panelFiltro.setBorder(javax.swing.BorderFactory.createTitledBorder("Filtro"));
 
-        comboFiltro.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Media", "Binomial", "Enfoque", "Relieve", "Laplacaino" }));
+        comboFiltro.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Media", "Binomial", "Enfoque", "Relieve", "Laplaciano", "Media 5x5", "Media 7x7" }));
         comboFiltro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboFiltroActionPerformed(evt);
@@ -394,7 +405,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edicion");
+        jMenu2.setText("Ver");
 
         cbmEstado.setSelected(true);
         cbmEstado.setText("Ver barra de estado");
@@ -424,6 +435,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jMenu2.add(cbmAtributos);
 
         jMenuBar1.add(jMenu2);
+
+        jMenu3.setText("Ayuda");
+
+        jMenuItem1.setText("Acerca de");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
 
@@ -592,28 +615,49 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         VentanaInterna vi = (VentanaInterna)panelEscritorio.getSelectedFrame();
         BufferedImage resultado = vi.getLienzo().getImage(true);
         
-        if(imagenFoco != null){
-            Kernel k = null;
+        if(resultado != null){
+            Kernel kernel = null;
 
             switch(this.comboFiltro.getSelectedIndex()){
                 case 0:
-                    k = KernelProducer.createKernel(KernelProducer.TYPE_MEDIA_3x3);
+                    kernel = KernelProducer.createKernel(KernelProducer.TYPE_MEDIA_3x3);
                     break;
                 case 1:
-                    k = KernelProducer.createKernel(KernelProducer.TYPE_BINOMIAL_3x3);
+                    kernel = KernelProducer.createKernel(KernelProducer.TYPE_BINOMIAL_3x3);
                     break;
                 case 2:
-                    k = KernelProducer.createKernel(KernelProducer.TYPE_ENFOQUE_3x3);
+                    kernel = KernelProducer.createKernel(KernelProducer.TYPE_ENFOQUE_3x3);
                     break;
                 case 3:
-                    k = KernelProducer.createKernel(KernelProducer.TYPE_RELIEVE_3x3);
+                    kernel = KernelProducer.createKernel(KernelProducer.TYPE_RELIEVE_3x3);
                     break;
                 case 4:
-                    k = KernelProducer.createKernel(KernelProducer.TYPE_LAPLACIANA_3x3);
+                    kernel = KernelProducer.createKernel(KernelProducer.TYPE_LAPLACIANA_3x3);
+                    break;
+                case 5:
+                    float filtro5x5[] = { 0.04f, 0.04f, 0.04f, 0.04f, 0.04f,
+                                          0.04f, 0.04f, 0.04f, 0.04f, 0.04f,
+                                          0.04f, 0.04f, 0.04f, 0.04f, 0.04f,
+                                          0.04f, 0.04f, 0.04f, 0.04f, 0.04f,
+                                          0.04f, 0.04f, 0.04f, 0.04f, 0.04f } ;
+                    kernel = new Kernel(5, 5, filtro5x5);
+                    break;
+                case 6:
+                    float filtro7x7[] = { 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f,
+                                          0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f,
+                                          0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f,
+                                          0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f,
+                                          0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f,
+                                          0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f,
+                                          0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f, 0.02f } ;
+                    kernel = new Kernel(7, 7, filtro7x7);
+                    break;
                 default:
             }
-            ConvolveOp cop = new ConvolveOp(k,ConvolveOp.EDGE_NO_OP,null);
-            cop.filter(resultado, null);
+            ConvolveOp cop = new ConvolveOp(kernel,ConvolveOp.EDGE_NO_OP, null);
+            BufferedImage imgdest = cop.filter(resultado, null);
+            vi.getLienzo().setImage(imgdest);
+            vi.getLienzo().repaint();
         }
         
         
@@ -624,17 +668,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         if (!source.getValueIsAdjusting()) {
             int valor = (int) source.getValue();
-            System.out.println("Slider" + valor);
-
-
+            //System.out.println("Slider " + valor);
             VentanaInterna vi = (VentanaInterna) (panelEscritorio.getSelectedFrame());
 
             if (vi != null) {
-                BufferedImage imgSource = vi.getLienzo().getImage();
-                if (imgSource != null) {
+                //BufferedImage imgSource = vi.getLienzo().getImage();
+                if (imagenFoco != null) {
                     try {
-                        RescaleOp rop = new RescaleOp(1.0F, valor, null);
-                        BufferedImage imgdest = rop.filter(imgSource, null);
+                        RescaleOp rop = new RescaleOp(1.0F, (valor-50)*5.0f, null);
+                        BufferedImage imgdest = rop.filter(imagenFoco, null);
                         vi.getLienzo().setImage(imgdest);
                         vi.getLienzo().repaint();
                     } catch (IllegalArgumentException e) {
@@ -644,6 +686,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_sliderBrilloStateChanged
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void sliderBrilloFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_sliderBrilloFocusGained
+        imagenFoco = ((VentanaInterna)(panelEscritorio.getSelectedFrame())).getLienzo().getImage();
+    }//GEN-LAST:event_sliderBrilloFocusGained
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox cbAlisar;
@@ -656,7 +706,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JComboBox comboFiltro;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;

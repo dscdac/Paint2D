@@ -46,7 +46,7 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Edicion"/>
+            <Property name="text" type="java.lang.String" value="Ver"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JCheckBoxMenuItem" name="cbmEstado">
@@ -74,6 +74,21 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbmAtributosActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenu3">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Ayuda"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Acerca de"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem1ActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -126,6 +141,7 @@
               <Image iconType="3" name="/iconos/Lapiz.gif"/>
             </Property>
             <Property name="selected" type="boolean" value="true"/>
+            <Property name="toolTipText" type="java.lang.String" value="L&#xe1;piz"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -139,6 +155,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/iconos/Linea.gif"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="L&#xed;nea"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -152,6 +169,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/iconos/Rectangulo.gif"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Rect&#xe1;ngulo"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -165,6 +183,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/iconos/Ovalo.gif"/>
             </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Elipse"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
@@ -507,6 +526,7 @@
                 <Component class="javax.swing.JSlider" name="sliderBrillo">
                   <Events>
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="sliderBrilloStateChanged"/>
+                    <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="sliderBrilloFocusGained"/>
                   </Events>
                 </Component>
               </SubComponents>
@@ -525,12 +545,14 @@
                 <Component class="javax.swing.JComboBox" name="comboFiltro">
                   <Properties>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                      <StringArray count="5">
+                      <StringArray count="7">
                         <StringItem index="0" value="Media"/>
                         <StringItem index="1" value="Binomial"/>
                         <StringItem index="2" value="Enfoque"/>
                         <StringItem index="3" value="Relieve"/>
-                        <StringItem index="4" value="Laplacaino"/>
+                        <StringItem index="4" value="Laplaciano"/>
+                        <StringItem index="5" value="Media 5x5"/>
+                        <StringItem index="6" value="Media 7x7"/>
                       </StringArray>
                     </Property>
                   </Properties>
