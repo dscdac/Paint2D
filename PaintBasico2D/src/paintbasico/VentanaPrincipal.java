@@ -9,12 +9,16 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
+import java.awt.image.LookupOp;
+import java.awt.image.LookupTable;
 import java.awt.image.RescaleOp;
 import java.io.File;
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JSlider;
 import sm.image.KernelProducer;
+import sm.image.LookupTableProducer;
 
 /**
  *
@@ -52,10 +56,21 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         tbFormas = new javax.swing.JToolBar();
+        btNuevo = new javax.swing.JButton();
+        btAbrir = new javax.swing.JButton();
+        btGuardar = new javax.swing.JButton();
+        jSeparator3 = new javax.swing.JToolBar.Separator();
         tbLapiz = new javax.swing.JToggleButton();
         tbLinea = new javax.swing.JToggleButton();
         tbRectangulo = new javax.swing.JToggleButton();
         tbElipse = new javax.swing.JToggleButton();
+        tbEditar = new javax.swing.JToggleButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        spGrosor = new javax.swing.JSpinner();
+        tbRelleno = new javax.swing.JToggleButton();
+        tbTransparencia = new javax.swing.JToggleButton();
+        tbAlisar = new javax.swing.JToggleButton();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
         jPanel1 = new javax.swing.JPanel();
         labelEstado = new javax.swing.JLabel();
         panelAtributos = new javax.swing.JPanel();
@@ -66,17 +81,19 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
-        panelGrosor = new javax.swing.JPanel();
-        spinnerGrosor = new javax.swing.JSpinner();
-        panelEfectos = new javax.swing.JPanel();
-        cbRelleno = new javax.swing.JCheckBox();
-        cbAlisar = new javax.swing.JCheckBox();
-        cbTransparencia = new javax.swing.JCheckBox();
-        cbEditar = new javax.swing.JCheckBox();
         panelBrillo = new javax.swing.JPanel();
         sliderBrillo = new javax.swing.JSlider();
         panelFiltro = new javax.swing.JPanel();
         comboFiltro = new javax.swing.JComboBox();
+        panelContraste = new javax.swing.JPanel();
+        btContrasteNormal = new javax.swing.JButton();
+        btContrasteIluminacion = new javax.swing.JButton();
+        btContrasteOscurecimiento = new javax.swing.JButton();
+        panelRotacion = new javax.swing.JPanel();
+        jSlider1 = new javax.swing.JSlider();
+        panelEscala = new javax.swing.JPanel();
+        btMasEscala = new javax.swing.JButton();
+        btMenosEscala = new javax.swing.JButton();
         panelEscritorio = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -87,14 +104,56 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         cbmEstado = new javax.swing.JCheckBoxMenuItem();
         cbmFormas = new javax.swing.JCheckBoxMenuItem();
         cbmAtributos = new javax.swing.JCheckBoxMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Paint Básico");
-        setPreferredSize(new java.awt.Dimension(1000, 800));
+        setPreferredSize(new java.awt.Dimension(1200, 800));
 
         tbFormas.setRollover(true);
+
+        btNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Document.png"))); // NOI18N
+        btNuevo.setToolTipText("Nuevo");
+        btNuevo.setFocusable(false);
+        btNuevo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btNuevo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btNuevoActionPerformed(evt);
+            }
+        });
+        tbFormas.add(btNuevo);
+
+        btAbrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Open_file.png"))); // NOI18N
+        btAbrir.setToolTipText("Abrir");
+        btAbrir.setFocusable(false);
+        btAbrir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btAbrir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btAbrir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAbrirActionPerformed(evt);
+            }
+        });
+        tbFormas.add(btAbrir);
+
+        btGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Save.png"))); // NOI18N
+        btGuardar.setToolTipText("Guardar");
+        btGuardar.setFocusable(false);
+        btGuardar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btGuardar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btGuardarActionPerformed(evt);
+            }
+        });
+        tbFormas.add(btGuardar);
+        tbFormas.add(jSeparator3);
 
         tbLapiz.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Lapiz.gif"))); // NOI18N
         tbLapiz.setSelected(true);
@@ -144,6 +203,64 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
         tbFormas.add(tbElipse);
+
+        tbEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/edit-icon.png"))); // NOI18N
+        tbEditar.setFocusable(false);
+        tbEditar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbEditar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        tbEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tbEditarActionPerformed(evt);
+            }
+        });
+        tbFormas.add(tbEditar);
+        tbFormas.add(jSeparator1);
+
+        spGrosor.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+        spGrosor.setToolTipText("Grosor");
+        spGrosor.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spGrosorStateChanged(evt);
+            }
+        });
+        tbFormas.add(spGrosor);
+
+        tbRelleno.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/paint-bucket-icon.png"))); // NOI18N
+        tbRelleno.setToolTipText("Relleno");
+        tbRelleno.setFocusable(false);
+        tbRelleno.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbRelleno.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        tbRelleno.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tbRellenoActionPerformed(evt);
+            }
+        });
+        tbFormas.add(tbRelleno);
+
+        tbTransparencia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/layer-transparent-icon.png"))); // NOI18N
+        tbTransparencia.setToolTipText("Transparencia");
+        tbTransparencia.setFocusable(false);
+        tbTransparencia.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbTransparencia.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        tbTransparencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tbTransparenciaActionPerformed(evt);
+            }
+        });
+        tbFormas.add(tbTransparencia);
+
+        tbAlisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/smooth-icon.png"))); // NOI18N
+        tbAlisar.setToolTipText("Alisar");
+        tbAlisar.setFocusable(false);
+        tbAlisar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        tbAlisar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        tbAlisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tbAlisarActionPerformed(evt);
+            }
+        });
+        tbFormas.add(tbAlisar);
+        tbFormas.add(jSeparator2);
 
         getContentPane().add(tbFormas, java.awt.BorderLayout.PAGE_START);
 
@@ -291,56 +408,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         panelAtributos.add(panelColor);
 
-        panelGrosor.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Grosor", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Arial", 1, 12))); // NOI18N
-        panelGrosor.setPreferredSize(new java.awt.Dimension(90, 90));
-
-        spinnerGrosor.setValue(1);
-        spinnerGrosor.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                spinnerGrosorStateChanged(evt);
-            }
-        });
-        panelGrosor.add(spinnerGrosor);
-
-        panelAtributos.add(panelGrosor);
-
-        panelEfectos.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-        panelEfectos.setLayout(new java.awt.GridLayout(2, 0));
-
-        cbRelleno.setText("Relleno");
-        cbRelleno.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbRellenoActionPerformed(evt);
-            }
-        });
-        panelEfectos.add(cbRelleno);
-
-        cbAlisar.setText("Alisar");
-        cbAlisar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbAlisarActionPerformed(evt);
-            }
-        });
-        panelEfectos.add(cbAlisar);
-
-        cbTransparencia.setText("Transparencia");
-        cbTransparencia.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbTransparenciaActionPerformed(evt);
-            }
-        });
-        panelEfectos.add(cbTransparencia);
-
-        cbEditar.setText("Editar");
-        cbEditar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbEditarActionPerformed(evt);
-            }
-        });
-        panelEfectos.add(cbEditar);
-
-        panelAtributos.add(panelEfectos);
-
         panelBrillo.setBorder(javax.swing.BorderFactory.createTitledBorder("Brillo"));
 
         sliderBrillo.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -368,6 +435,45 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelFiltro.add(comboFiltro);
 
         panelAtributos.add(panelFiltro);
+
+        panelContraste.setBorder(javax.swing.BorderFactory.createTitledBorder("Contraste"));
+
+        btContrasteNormal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Button-Blank-White-icon.png"))); // NOI18N
+        btContrasteNormal.setToolTipText("Normal");
+        btContrasteNormal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btContrasteNormalActionPerformed(evt);
+            }
+        });
+        panelContraste.add(btContrasteNormal);
+
+        btContrasteIluminacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Button-Blank-Yellow-icon.png"))); // NOI18N
+        btContrasteIluminacion.setToolTipText("Con iluminación");
+        panelContraste.add(btContrasteIluminacion);
+
+        btContrasteOscurecimiento.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/Button-Blank-Gray-icon.png"))); // NOI18N
+        btContrasteOscurecimiento.setToolTipText("Con oscurecimiento");
+        panelContraste.add(btContrasteOscurecimiento);
+
+        panelAtributos.add(panelContraste);
+
+        panelRotacion.setBorder(javax.swing.BorderFactory.createTitledBorder("Rotación"));
+
+        jSlider1.setPaintTicks(true);
+        jSlider1.setValue(0);
+        panelRotacion.add(jSlider1);
+
+        panelAtributos.add(panelRotacion);
+
+        panelEscala.setBorder(javax.swing.BorderFactory.createTitledBorder("Escala"));
+
+        btMasEscala.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/suma.png"))); // NOI18N
+        panelEscala.add(btMasEscala);
+
+        btMenosEscala.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/resta.png"))); // NOI18N
+        panelEscala.add(btMenosEscala);
+
+        panelAtributos.add(panelEscala);
 
         jPanel1.add(panelAtributos, java.awt.BorderLayout.WEST);
 
@@ -436,6 +542,22 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
+        jMenu4.setText("Imagen");
+
+        jMenuItem2.setText("AffineTransformOp");
+        jMenu4.add(jMenuItem2);
+
+        jMenuItem3.setText("LookupOp");
+        jMenu4.add(jMenuItem3);
+
+        jMenuItem4.setText("BandCombineOp");
+        jMenu4.add(jMenuItem4);
+
+        jMenuItem5.setText("ColorConvertOp");
+        jMenu4.add(jMenuItem5);
+
+        jMenuBar1.add(jMenu4);
+
         jMenu3.setText("Ayuda");
 
         jMenuItem1.setText("Acerca de");
@@ -462,41 +584,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_cbmEstadoActionPerformed
 
     private void miAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAbrirActionPerformed
-        JFileChooser dlg = new JFileChooser();
-        int resp = dlg.showOpenDialog(this);
-        if( resp == JFileChooser.APPROVE_OPTION) {
-            try {
-                File f = dlg.getSelectedFile();
-                BufferedImage img = ImageIO.read(f);
-                VentanaInterna vi = new VentanaInterna();
-                vi.getLienzo().setImage(img);
-                this.panelEscritorio.add(vi);
-                vi.setTitle(f.getName());
-                vi.setVisible(true);
-            } catch (Exception ex) {
-                System.err.println("Error al leer la imagen: "+ex);
-            }
-        }
+        abrirArchivo();
     }//GEN-LAST:event_miAbrirActionPerformed
 
     private void miGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miGuardarActionPerformed
-        VentanaInterna vi=(VentanaInterna) panelEscritorio.getSelectedFrame(); 
-        if (vi != null) {
-            JFileChooser dlg = new JFileChooser();
-            int resp = dlg.showSaveDialog(this);
-            if (resp == JFileChooser.APPROVE_OPTION) {
-                try {
-                    BufferedImage img = vi.getLienzo().getImage(true);
-                    if (img != null) {
-                        File f = dlg.getSelectedFile();
-                        ImageIO.write(img, "jpg", f);
-                        vi.setTitle(f.getName());
-                    }
-                }catch (Exception ex) {
-                    System.err.println("Error al guardar la imagen: "+ex);
-                }
-            }
-        }
+        guardarArchivo();
     }//GEN-LAST:event_miGuardarActionPerformed
 
     private void jPanel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MouseClicked
@@ -529,18 +621,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         vi.getLienzo().setColor(Color.GREEN);
     }//GEN-LAST:event_jPanel8MouseClicked
 
-    private void cbRellenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbRellenoActionPerformed
-        VentanaInterna vi = (VentanaInterna)panelEscritorio.getSelectedFrame();
-        
-        if (this.cbRelleno.isSelected()){
-            vi.getLienzo().setRelleno(true);
-            return;
-        }else{
-            vi.getLienzo().setRelleno(false);
-            return;
-        }
-    }//GEN-LAST:event_cbRellenoActionPerformed
-
     private void tbLapizMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbLapizMouseClicked
         deseleccionarFormas();
         this.tbLapiz.setSelected(true);
@@ -566,13 +646,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_tbRectanguloMouseClicked
 
     private void miNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miNuevoActionPerformed
-        VentanaInterna vi = new VentanaInterna();
-        this.panelEscritorio.add(vi); 
-        vi.setVisible(true);
-        BufferedImage img;
-        img = new BufferedImage(300,300,BufferedImage.TYPE_INT_RGB);
-        img.createGraphics().fillRect(0, 0, 300, 300);
-        vi.getLienzo().setImage(img);
+        nuevaVentana();
     }//GEN-LAST:event_miNuevoActionPerformed
 
     private void tbElipseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbElipseMouseClicked
@@ -590,26 +664,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void cbmFormasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbmFormasActionPerformed
         tbFormas.setVisible(!tbFormas.isVisible());
     }//GEN-LAST:event_cbmFormasActionPerformed
-
-    private void cbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEditarActionPerformed
-        VentanaInterna vi = (VentanaInterna)panelEscritorio.getSelectedFrame();
-        vi.getLienzo().setEditable(cbEditar.isSelected());
-    }//GEN-LAST:event_cbEditarActionPerformed
-
-    private void cbTransparenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbTransparenciaActionPerformed
-        VentanaInterna vi = (VentanaInterna)panelEscritorio.getSelectedFrame();
-        vi.getLienzo().setTransparente(cbTransparencia.isSelected());
-    }//GEN-LAST:event_cbTransparenciaActionPerformed
-
-    private void cbAlisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAlisarActionPerformed
-        VentanaInterna vi = (VentanaInterna)panelEscritorio.getSelectedFrame();
-        vi.getLienzo().setAlisado(cbAlisar.isSelected());
-    }//GEN-LAST:event_cbAlisarActionPerformed
-
-    private void spinnerGrosorStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spinnerGrosorStateChanged
-        VentanaInterna vi = (VentanaInterna)panelEscritorio.getSelectedFrame();
-        vi.getLienzo().setGrosor((int)spinnerGrosor.getValue());
-    }//GEN-LAST:event_spinnerGrosorStateChanged
 
     private void comboFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboFiltroActionPerformed
         VentanaInterna vi = (VentanaInterna)panelEscritorio.getSelectedFrame();
@@ -695,11 +749,79 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         imagenFoco = ((VentanaInterna)(panelEscritorio.getSelectedFrame())).getLienzo().getImage();
     }//GEN-LAST:event_sliderBrilloFocusGained
 
+    private void spGrosorStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spGrosorStateChanged
+        VentanaInterna vi = (VentanaInterna)panelEscritorio.getSelectedFrame();
+        vi.getLienzo().setGrosor((int)spGrosor.getValue());
+    }//GEN-LAST:event_spGrosorStateChanged
+
+    private void tbRellenoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbRellenoActionPerformed
+        VentanaInterna vi = (VentanaInterna)panelEscritorio.getSelectedFrame();
+        
+        if (this.tbRelleno.isSelected()){
+            vi.getLienzo().setRelleno(true);
+            return;
+        }else{
+            vi.getLienzo().setRelleno(false);
+            return;
+        }
+    }//GEN-LAST:event_tbRellenoActionPerformed
+
+    private void tbTransparenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbTransparenciaActionPerformed
+        VentanaInterna vi = (VentanaInterna)panelEscritorio.getSelectedFrame();
+        vi.getLienzo().setTransparente(tbTransparencia.isSelected());
+    }//GEN-LAST:event_tbTransparenciaActionPerformed
+
+    private void tbAlisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbAlisarActionPerformed
+        VentanaInterna vi = (VentanaInterna)panelEscritorio.getSelectedFrame();
+        vi.getLienzo().setAlisado(tbAlisar.isSelected());
+    }//GEN-LAST:event_tbAlisarActionPerformed
+
+    private void tbEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbEditarActionPerformed
+        VentanaInterna vi = (VentanaInterna)panelEscritorio.getSelectedFrame();
+        vi.getLienzo().setEditable(tbEditar.isSelected());
+    }//GEN-LAST:event_tbEditarActionPerformed
+
+    private void btNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btNuevoActionPerformed
+        nuevaVentana();
+    }//GEN-LAST:event_btNuevoActionPerformed
+
+    private void btAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAbrirActionPerformed
+        abrirArchivo();
+    }//GEN-LAST:event_btAbrirActionPerformed
+
+    private void btGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGuardarActionPerformed
+        guardarArchivo();
+    }//GEN-LAST:event_btGuardarActionPerformed
+
+    private void btContrasteNormalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btContrasteNormalActionPerformed
+        VentanaInterna vi = (VentanaInterna) (panelEscritorio.getSelectedFrame());
+        
+        if (vi != null) {
+            BufferedImage imgSource = vi.getLienzo().getImage();
+            if(imgSource!=null){
+                try{
+                    int type = LookupTableProducer.TYPE_SFUNCION;
+                    LookupTable lt = LookupTableProducer.createLookupTable(type);
+                    LookupOp lop = new LookupOp(lt, null);
+                    // Imagen origen y destino iguales
+                    lop.filter( imgSource , imgSource);
+                    vi.repaint();
+                } catch(Exception e){
+                    System.err.println(e.getLocalizedMessage());
+                }
+            }
+        }
+    }//GEN-LAST:event_btContrasteNormalActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JCheckBox cbAlisar;
-    private javax.swing.JCheckBox cbEditar;
-    private javax.swing.JCheckBox cbRelleno;
-    private javax.swing.JCheckBox cbTransparencia;
+    private javax.swing.JButton btAbrir;
+    private javax.swing.JButton btContrasteIluminacion;
+    private javax.swing.JButton btContrasteNormal;
+    private javax.swing.JButton btContrasteOscurecimiento;
+    private javax.swing.JButton btGuardar;
+    private javax.swing.JButton btMasEscala;
+    private javax.swing.JButton btMenosEscala;
+    private javax.swing.JButton btNuevo;
     private javax.swing.JCheckBoxMenuItem cbmAtributos;
     private javax.swing.JCheckBoxMenuItem cbmEstado;
     private javax.swing.JCheckBoxMenuItem cbmFormas;
@@ -707,8 +829,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -716,6 +843,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JToolBar.Separator jSeparator3;
+    private javax.swing.JSlider jSlider1;
     private javax.swing.JLabel labelEstado;
     private javax.swing.JMenuItem miAbrir;
     private javax.swing.JMenuItem miGuardar;
@@ -723,16 +854,91 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JPanel panelAtributos;
     private javax.swing.JPanel panelBrillo;
     private javax.swing.JPanel panelColor;
-    private javax.swing.JPanel panelEfectos;
+    private javax.swing.JPanel panelContraste;
+    private javax.swing.JPanel panelEscala;
     private javax.swing.JDesktopPane panelEscritorio;
     private javax.swing.JPanel panelFiltro;
-    private javax.swing.JPanel panelGrosor;
+    private javax.swing.JPanel panelRotacion;
     private javax.swing.JSlider sliderBrillo;
-    private javax.swing.JSpinner spinnerGrosor;
+    private javax.swing.JSpinner spGrosor;
+    private javax.swing.JToggleButton tbAlisar;
+    private javax.swing.JToggleButton tbEditar;
     private javax.swing.JToggleButton tbElipse;
     private javax.swing.JToolBar tbFormas;
     private javax.swing.JToggleButton tbLapiz;
     private javax.swing.JToggleButton tbLinea;
     private javax.swing.JToggleButton tbRectangulo;
+    private javax.swing.JToggleButton tbRelleno;
+    private javax.swing.JToggleButton tbTransparencia;
     // End of variables declaration//GEN-END:variables
+
+    private boolean nuevaVentana(){
+        try{
+            VentanaInterna vi = new VentanaInterna();
+            this.panelEscritorio.add(vi); 
+            vi.setVisible(true);
+            BufferedImage img;
+            img = new BufferedImage(300,300,BufferedImage.TYPE_INT_RGB);
+            img.createGraphics().fillRect(0, 0, 300, 300);
+            vi.getLienzo().setImage(img);
+            return true;
+        }
+        catch(Exception e){
+            System.out.println(e);
+            return false;
+        }
+    }
+    
+    private boolean abrirArchivo(){
+        try{
+            JFileChooser dlg = new JFileChooser();
+            int resp = dlg.showOpenDialog(this);
+            if( resp == JFileChooser.APPROVE_OPTION) {
+                try {
+                    File f = dlg.getSelectedFile();
+                    BufferedImage img = ImageIO.read(f);
+                    VentanaInterna vi = new VentanaInterna();
+                    vi.getLienzo().setImage(img);
+                    this.panelEscritorio.add(vi);
+                    vi.setTitle(f.getName());
+                    vi.setVisible(true);
+                } catch (Exception ex) {
+                    System.err.println("Error al leer la imagen: "+ex);
+                }
+            }
+            return true;
+        }
+        catch(Exception e){
+            System.out.println(e);
+            return false;
+        }
+    }
+    
+    private boolean guardarArchivo(){
+        try{
+            VentanaInterna vi=(VentanaInterna) panelEscritorio.getSelectedFrame(); 
+            if (vi != null) {
+                JFileChooser dlg = new JFileChooser();
+                int resp = dlg.showSaveDialog(this);
+                if (resp == JFileChooser.APPROVE_OPTION) {
+                    try {
+                        BufferedImage img = vi.getLienzo().getImage(true);
+                        if (img != null) {
+                            File f = dlg.getSelectedFile();
+                            ImageIO.write(img, "jpg", f);
+                            vi.setTitle(f.getName());
+                        }
+                    }catch (Exception ex) {
+                        System.err.println("Error al guardar la imagen: "+ex);
+                    }
+                }
+            }
+            return true;
+        }
+        catch(Exception e){
+            System.out.println(e);
+            return false;
+        }
+    }
+    
 }
