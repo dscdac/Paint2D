@@ -5,18 +5,24 @@
 package paintbasico;
 
 /**
- *
- * @author David
+ * @author      David Santiago <dscdac@correo.ugr.es>
+ * @version     1.0
+ * @since       0.1
  */
 public class VentanaInterna extends javax.swing.JInternalFrame {
     /**
-     * Creates new form VentanaInterna
+     * Constructor por defecto de VentanaInterna.
      */
     public VentanaInterna() {
         initComponents();
         
     }
     
+    /**
+    * Devuelve el Lienzo2dImagen que la VentanaInterna contiene 
+    *
+    * @return SM.DSC.IU.Lienzo2DImagen
+    */
     public SM.DSC.IU.Lienzo2DImagen getLienzo(){
         return lienzo2DImagen1;
     }

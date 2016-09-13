@@ -38,7 +38,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         this.panelEscritorio.getDesktopManager().activateFrame(vi);
         */
     }
-    
+
     private void deseleccionarFormas(){
         this.tbLapiz.setSelected(false);
         this.tbLinea.setSelected(false);
@@ -97,7 +97,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelEscritorio = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        miNuevo = new javax.swing.JMenuItem();
         miAbrir = new javax.swing.JMenuItem();
         miGuardar = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
@@ -482,17 +481,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jMenu1.setText("Archivo");
 
-        miNuevo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.ALT_MASK));
-        miNuevo.setText("Nuevo");
-        miNuevo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miNuevoActionPerformed(evt);
-            }
-        });
-        jMenu1.add(miNuevo);
-
         miAbrir.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_MASK));
-        miAbrir.setText("Abrir");
+        miAbrir.setText("Abrir Audio");
         miAbrir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miAbrirActionPerformed(evt);
@@ -501,7 +491,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jMenu1.add(miAbrir);
 
         miGuardar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.ALT_MASK));
-        miGuardar.setText("Guardar");
+        miGuardar.setText("Grabar Audio");
         miGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miGuardarActionPerformed(evt);
@@ -574,14 +564,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void cbmEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbmEstadoActionPerformed
-        if(this.cbmEstado.isSelected()){
-            this.labelEstado.setVisible(true);
-        }else{
-            this.labelEstado.setVisible(false);
-        }
-    }//GEN-LAST:event_cbmEstadoActionPerformed
 
     private void miAbrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miAbrirActionPerformed
         abrirArchivo();
